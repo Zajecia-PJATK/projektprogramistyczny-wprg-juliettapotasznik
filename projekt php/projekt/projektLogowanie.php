@@ -30,7 +30,7 @@ if(isset($_POST['zaloguj']))
     if ($result->num_rows > 0)
     {
         $_SESSION['zalogowany'] = true;
-        $_SESSION['email'] = $email;
+        setcookie('email',$email);
         header("Location: projekt.php");
         exit();
 
@@ -41,3 +41,4 @@ if(isset($_POST['zaloguj']))
     $mysqli->close();
 
 }
+?>
