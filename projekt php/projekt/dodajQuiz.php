@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -26,8 +27,8 @@
         <input type="number" name="poziomTrudnosci" value="1" min="1" max="10" required>
     </fieldset>
 
-        <input type="submit" name="stworz" value="Stwórz">
-
+    <input type="submit" name="stworz" value="Stwórz"></br>
+    <a href="projekt.php">Powrót do menu głównego.</a>
 </form>
 </body>
 </html>
@@ -43,7 +44,17 @@ if (isset($_POST['stworz']))
 
 
         $mysqli->query("INSERT INTO quizy (`nazwa_uzytkownika`, `kategoria`,`poziom_trudnosci`,`nazwa_quizu`)
+                 
                     VALUES ('".$_COOKIE['email']."', '".$kategoria."', '".$poziomTrudnosci."', '".$nazwa."');");
+
+     $value='SELECT Id_quizu FROM quizy ORDER BY Id_quizu DESC LIMIT 1';
+$result=$mysqli->query($value);
+    while ($row = $result->fetch_assoc()) {
+        $wartosc= $row['Id_quizu'];
+    }
+
+
+setcookie('IDquizu',$wartosc);
 
 
         include ("dodajPytania.php");

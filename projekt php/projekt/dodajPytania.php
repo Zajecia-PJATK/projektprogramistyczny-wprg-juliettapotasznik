@@ -19,14 +19,18 @@
         <input type="submit" name="dalej" value="dalej">
 
 </form>
+
 </body>
 </html>
 <?php
-$mysqli = mysqli_connect("localhost", "root", "", "projekt");
+
+
 if(isset($_POST['dalej'])) {
+    setcookie('rodzaj', $_POST['rodzaj']);
     if ($_POST['rodzaj'] == 'jednokrotnego') {
 
-        require_once("jednokrotnego.php");
+
+        include("jednokrotnego.php");
 
     } else if ($_POST['rodzaj'] == 'wielokrotnego') {
         include("wielokrotnego.php");
@@ -37,7 +41,9 @@ if(isset($_POST['dalej'])) {
     } else if ($_POST['rodzaj'] == 'luki') {
         include("luki.php");
     }
+
 }
 
 
 ?>
+<a href="projekt.php">Powrót do menu głównego.</a>

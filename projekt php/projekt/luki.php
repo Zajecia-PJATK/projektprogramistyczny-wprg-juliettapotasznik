@@ -9,14 +9,13 @@
 
 <form action="luki.php" method="post">
     <fieldset>
-        <label>Podaj pytanie:</label>
+        <label>Podaj zdanie w ktorym znajduje sie odpowiedz:</label>
         <input type="text" name="pytanie" maxlength="100" required></br>
         <label>Podaj podpowiedz:</label>
         <input type="text" name="podpowiedz" maxlength="100" required></br>
         <label>Podaj odpowiedz:</label>
         <input type="text" name="odpowiedz1" maxlength="100" required></br>
-        <label>Podaj zdanie w ktorym znajduje sie odpowiedz:</label>
-        <input type="text" name="zdanie" maxlength="100" required></br>
+
 
     </fieldset>
     <input type="submit" name="dodaj" value="dodaj">
@@ -30,20 +29,16 @@ $mysqli = mysqli_connect("localhost", "root", "", "projekt");
 if(isset($_POST['dodaj']))
 {
 
-    $rodzaj = $_POST['rodzaj'];
+    $rodzaj = $_COOKIE['rodzaj'];
     $pytanie= $_POST['pytanie'];
     $odpowiedz1= $_POST['odpowiedz1'];
-    $odpowiedz2= $_POST['odpowiedz2'];
-    $odpowiedz3= $_POST['odpowiedz3'];
+
     $podpowiedz= $_POST['podpowiedz'];
-    $niep_odp1= $_POST['odp1'];
-    $niep_odp2= $_POST['odp2'];
-    $niep_odp3= $_POST['odp3'];
-    $zdanie =$_POST['zdanie'];
 
 
-    $mysqli->query("INSERT INTO Pytania (`rodzaj_pytania`, `pytanie`,`odpowiedz1`,`odpowiedz2`,`odpowiedz3`,`podpowiedz`,`nieprawidlowa_odp1`,`nieprawidlowa_odp2`,`nieprawidlowa_odp3`,`zdanie_z_luka`)
-                    VALUES ('" . $rodzaj . "', '" . $pytanie . "', '" . $odpowiedz1 . "', '" . $odpowiedz2 . "', '" . $odpowiedz3 . "', '" . $podpowiedz . "', '" . $niep_odp1 . "', '" . $niep_odp2 . "', '" . $niep_odp3 . "', '" . $zdanie. "');");
+
+    $mysqli->query("INSERT INTO Pytania (`Id_quizu`,`rodzaj_pytania`,`pytanie`,`odpowiedz1`,`podpowiedz`)
+                    VALUES ( '" .$_COOKIE['IDquizu'] . "','" . $rodzaj . "','" . $pytanie . "','" . $odpowiedz1 . "', '" . $podpowiedz  . "');");
 
     $mysqli->close();
     header("Location: dodajPytania.php");
