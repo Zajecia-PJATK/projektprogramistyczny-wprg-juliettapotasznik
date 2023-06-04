@@ -43,4 +43,5 @@ $semail='SELECT email FROM uzytkownicy WHERE email='."'$email'";
         echo "Podany login jest już zajęty.";
     $mysqli->close();
 }
+
 ?>

@@ -7,16 +7,17 @@
 <body>
 <h1>Aplikacja Quiz</h1>
 <?php
-echo "Witaj {$_COOKIE['email']} ";
-$mysqli = mysqli_connect("localhost", "root", "", "projekt");
-$sql=$mysqli->query('SELECT COUNT(*) FROM Quizy WHERE nazwa_uzytkownika='."'{$_COOKIE['email']} '");
-while ($row = $sql->fetch_assoc()) {
-    $iloscQuizow= $row['COUNT(*)'];
-}
+echo "<h4>Witaj {$_COOKIE['email']}</h4> ";
+
 ?>
 <form method="post" action="przekierowanie.php">
     <?php
-    if ($iloscQuizow === 0) {
+    $mysqli = mysqli_connect("localhost", "root", "", "projekt");
+    $sql=$mysqli->query('SELECT COUNT(*) FROM Quizy WHERE nazwa_uzytkownika='."'{$_COOKIE['email']} '");
+    while ($row = $sql->fetch_assoc()) {
+        $iloscQuizow = $row['COUNT(*)'];
+    }
+    if ($iloscQuizow == 0) {
         echo "<p>Brak quizów</p>";
     }else {
         echo "<h4>Twoje quizy:</h4>";
@@ -44,12 +45,16 @@ while ($row = $sql->fetch_assoc()) {
         }
 
         echo "</table>";
+
     }
     $mysqli->close();
     ?>
         <hr>
         Opcje:<ul>
             <li><a href="dodajQuiz.php">Dodaj quiz</a></li>
+        <li><a href="dodajQuiz.php">Przeglądaj lub wyszukaj quizów</a></li>
+
+
 
         </ul>
 

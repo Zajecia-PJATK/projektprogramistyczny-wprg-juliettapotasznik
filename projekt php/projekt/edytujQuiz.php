@@ -39,7 +39,7 @@ session_start();
             echo "Brak pytań w tym quizie";
         }
         else {
-            echo"<h5>Twoj quiz:</h5>";
+            echo"Twoj quiz:";
             echo "<table border='1px'>";
             echo "<tr><th>Nazwa quizu</th><th>Kategoria</th><th>poziom trudnosci</th><th>edytuj</th></tr>";
             echo "<tr>";
@@ -64,9 +64,9 @@ session_start();
             }
 
 
-            echo "Aby usunac lub edytowac pytanie zaznacz pytanie i kliknij odpowiedni przycisk";
+            echo "Aby usunac pytanie zaznacz pytanie i kliknij odpowiedni przycisk";
             echo "<table border='1px'>";
-            echo "<tr><th>Pytanie</th><th>Rodzaj pytania</th><th>usun</th><th>edytuj</th></tr>";
+            echo "<tr><th>Pytanie</th><th>Rodzaj pytania</th><th>usun</th></tr>";
             echo "<tr>";
             for ($i = 0; $i < $iloscPytan; $i++) {
                 echo "<tr>";
@@ -74,12 +74,17 @@ session_start();
                 echo "<td align='center'>{$pytanie[$i]}<input type='radio' value={$i} name='pytania'></td>";
                 echo "<td align='center'>{$rodzaj[$i]}</td>";
                 echo "<td align='center'><input type='submit' name='usun'  value='usun'></td>";
-                echo "<td align='center'><input type='submit' name='edytuj' value='edytuj'></td>";
+
                 echo "</tr>";
             }
+            echo "<hr>";
+
 
 
             echo "</table>";
+            echo "<hr>";
+            echo "Aby dodać kolejne pytanie do twojego quizu klikjnij poniżej: </br>";
+            echo "<input type='submit' name='dodajPytanie' value='Dodaj Pytanie'>";
         }
 
     }else{
@@ -98,17 +103,16 @@ if (isset($_POST['usun'])) {
     $liczba=intval($_SESSION['usunPytanie']);
     $mysqli->query('DELETE FROM Pytania WHERE pytanie='."'{$pytanie[$liczba]} '".'AND Id_quizu='."'$id '".'AND rodzaj_pytania='."'{$rodzaj[$liczba]}'");
     $mysqli->close();
-} elseif (isset($_POST['edytuj'])) {
-    $_SESSION['edytujPytanie'] = $_POST['pytania'];
-    $liczba=intval($_SESSION['edytujPytanie']);
-
-    $mysqli->query('DELETE FROM Pytania WHERE pytanie='."'{$pytanie[$liczba]} '".'AND Id_quizu='."'$id '".'AND rodzaj_pytania='."'{$rodzaj[$liczba]}'");
-    $mysqli->close(); //tutaj zamieniac
-
 }
 elseif (isset($_POST['EdytowanieQuizu']))
 {
+    header("Location: edytowanieWartosciWQuizie.php");
 
+    $mysqli->close();
+}
+elseif (isset($_POST['dodajPytanie']))
+{
+    include("dodajPytania.php");
     $mysqli->close();
 }
 
