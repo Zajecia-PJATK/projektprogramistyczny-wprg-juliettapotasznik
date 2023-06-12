@@ -28,7 +28,8 @@ session_start();
         while ($row = $result->fetch_assoc()) {
             $id= $row['Id_quizu'];
         }
-        $_SESSION['id']=$id;
+        setcookie('IDquizu',$id);
+       // $_SESSION['id']=$id;
         $sql=$mysqli->query('SELECT COUNT(*) FROM Pytania WHERE Id_quizu='."'$id '");
         while ($row = $sql->fetch_assoc()) {
 

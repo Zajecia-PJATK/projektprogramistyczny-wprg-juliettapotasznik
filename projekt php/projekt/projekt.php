@@ -52,7 +52,7 @@ echo "<h4>Witaj {$_COOKIE['email']}</h4> ";
         <hr>
         Opcje:<ul>
             <li><a href="dodajQuiz.php">Dodaj quiz</a></li>
-        <li><a href="dodajQuiz.php">Przeglądaj lub wyszukaj quizów</a></li>
+        <li><a href="przegladajQuizy.php">Przeglądaj lub wyszukaj quizów</a></li>
 
 
 
