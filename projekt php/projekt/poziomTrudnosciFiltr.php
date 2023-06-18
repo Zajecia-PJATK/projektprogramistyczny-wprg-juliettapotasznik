@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Przegladanie quizow</title>
+</head>
+<body>
+<h2>Przeglądaj quizy innych użytkowników</h2>
 <form action="poziomTrudnosciFiltr.php" method="post">
     Wybierz poziom trudnosci:
     <fieldset>
@@ -10,8 +18,12 @@ $mysqli = mysqli_connect("localhost", "root", "", "projekt");
 
 if(isset($_POST['wybierz']))
 {
+    $poziomTrudnosci = $mysqli->query('SELECT * FROM Quizy where poziom_trudnosci='."{$_POST['poziomTrudnosci']}");
 
-    $poziomTrudnosci = $mysqli->query('SELECT nazwa_uzytkownika, kategoria,poziom_trudnosci, nazwa_quizu FROM Quizy where poziom_trudnosci='."{$_POST['poziomTrudnosci']}");
+    echo "<form action='przekierowaniev2.php' method='get'>";
+
+
+    echo "<h4>Naciśnij na wybrany tytuł i zacznij quiz!!</h4>";
     echo "<table border='1px'>";
     echo "<tr><th>nazwa użytkownika</th><th>kategoria</th><th>poziom trudności</th><th>nazwa quizu</th></tr>";
     if ($poziomTrudnosci->num_rows > 0) {
@@ -21,13 +33,19 @@ if(isset($_POST['wybierz']))
             echo " <td>{$row["nazwa_uzytkownika"]}</td>";
             echo "<td>{$row["kategoria"]}</td>";
             echo "<td>{$row["poziom_trudnosci"]} </td>";
-            echo "<td>{$row["nazwa_quizu"]} </td>";
+            echo "<td style='text-align:center'><input type='submit' name='{$row["Id_quizu"]}' value='{$row["nazwa_quizu"]}' </td>";
+
             echo "</tr>";
 
         }
     }
     echo "</table>";
     $mysqli->close();
-    include "przegladajQuizy.php";
 
 }
+?>
+<br>
+<a href="przegladajQuizy.php">Powrót do przegladania quizów.</a>
+</body>
+</html>
+

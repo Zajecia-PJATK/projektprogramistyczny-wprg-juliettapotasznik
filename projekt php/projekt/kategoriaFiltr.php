@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Przegladanie quizow</title>
+</head>
+<body>
+
 <form action="kategoriaFiltr.php" method="post">
     Wybierz kategorię:
     <fieldset>
@@ -16,23 +24,33 @@ $mysqli = mysqli_connect("localhost", "root", "", "projekt");
 if(isset($_POST['wybierz']))
 {
 
-        $kategoria = $mysqli->query('SELECT nazwa_uzytkownika, kategoria,poziom_trudnosci, nazwa_quizu FROM Quizy where kategoria='."'{$_POST['kategoria']}'");
-        echo "<table border='1px'>";
-        echo "<tr><th>nazwa użytkownika</th><th>kategoria</th><th>poziom trudności</th><th>nazwa quizu</th></tr>";
-        if ($kategoria->num_rows > 0) {
-            while ($row = $kategoria->fetch_assoc()) {
-                echo "<tr>";
+        $kategoria = $mysqli->query('SELECT * FROM Quizy where kategoria='."'{$_POST['kategoria']}'");
+    echo "<form action='przekierowaniev2.php' method='get'>";
+    echo "<h4>Naciśnij na wybrany tytuł i zacznij quiz!!</h4>";
+    echo "<table border='1px'>";
+    echo "<tr><th>nazwa użytkownika</th><th>kategoria</th><th>poziom trudności</th><th>nazwa quizu</th></tr>";
+    if ($kategoria->num_rows > 0) {
+        while ($row = $kategoria->fetch_assoc()) {
+            echo "<tr>";
 
-                echo " <td>{$row["nazwa_uzytkownika"]}</td>";
-                echo "<td>{$row["kategoria"]}</td>";
-                echo "<td>{$row["poziom_trudnosci"]} </td>";
-                echo "<td>{$row["nazwa_quizu"]} </td>";
-                echo "</tr>";
+            echo " <td>{$row["nazwa_uzytkownika"]}</td>";
+            echo "<td>{$row["kategoria"]}</td>";
+            echo "<td>{$row["poziom_trudnosci"]} </td>";
+            echo "<td style='text-align:center'><input type='submit' name='{$row["Id_quizu"]}' value='{$row["nazwa_quizu"]}' </td>";
 
-            }
+            echo "</tr>";
+
         }
+    }
+    echo "</table>";
+    echo "</form>";
     $mysqli->close();
-        echo "</table>";
-        include "przegladajQuizy.php";
 
 }
+?>
+</form>
+<br>
+<a href="przegladajQuizy.php">Powrót do przegladania quizów.</a>
+</body>
+</html>
+

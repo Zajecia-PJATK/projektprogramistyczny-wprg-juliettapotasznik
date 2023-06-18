@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -38,30 +41,15 @@ if(isset($_POST['przegladaj']))
 
     if($_POST['filtry']=='Wszystkie')
     {
-        $wszystko = $mysqli->query('SELECT nazwa_uzytkownika, kategoria,poziom_trudnosci, nazwa_quizu FROM Quizy ');
-        echo "<table border='1px'>";
-        echo "<tr><th>nazwa użytkownika</th><th>kategoria</th><th>poziom trudności</th><th>nazwa quizu</th></tr>";
-        if ($wszystko->num_rows > 0) {
-            while ($row = $wszystko->fetch_assoc()) {
-                echo "<tr>";
-
-                echo " <td>{$row["nazwa_uzytkownika"]}</td>";
-                echo "<td>{$row["kategoria"]}</td>";
-                echo "<td>{$row["poziom_trudnosci"]} </td>";
-                echo "<td>{$row["nazwa_quizu"]} </td>";
-                echo "</tr>";
-
-            }
-        }
-        echo "</table>";
+       header("Location: wszystkieQuizy.php");
     }
     else if($_POST['filtry']=='Kategoria')
     {
- include "kategoriaFiltr.php";
+header("Location: kategoriaFiltr.php");
     }
     else
     {
-        include "poziomTrudnosciFiltr.php";
+        header( "Location: poziomTrudnosciFiltr.php");
     }
 
 }
@@ -69,26 +57,10 @@ if(isset($_POST['szukaj']))
 {
     $szukane='%'.$_POST['slowo'].'%';
 
-
-    $tab = $mysqli->query('SELECT nazwa_uzytkownika, kategoria,poziom_trudnosci, nazwa_quizu FROM Quizy where nazwa_quizu LIKE '."'$szukane'");
-    echo "<table border='1px'>";
-    echo "<tr><th>nazwa użytkownika</th><th>kategoria</th><th>poziom trudności</th><th>nazwa quizu</th></tr>";
-    if ($tab->num_rows > 0) {
-
-        while ($row = $tab->fetch_assoc()) {
-            echo "<tr>";
-
-            echo " <td>{$row["nazwa_uzytkownika"]}</td>";
-            echo "<td>{$row["kategoria"]}</td>";
-            echo "<td>{$row["poziom_trudnosci"]} </td>";
-            echo "<td>{$row["nazwa_quizu"]} </td>";
-            echo "</tr>";
-
-        }
-    }
-    echo "</table>";
+    $_SESSION['slowo']=$szukane;
+   header( "Location: slowoFiltr.php");
 
 
 }
-$mysqli->close();
+
 

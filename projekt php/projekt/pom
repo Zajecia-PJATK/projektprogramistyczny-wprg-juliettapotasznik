@@ -1,0 +1,70 @@
+<?php
+$numery_rekordow = array_keys($tabPytania);
+print_r($numery_rekordow);
+
+$pomocnicza= $tabPytania;
+
+
+for ($i = 0; $i < count($pomocnicza); $i++) {
+// Losujemy numer rekordu
+    $losowanie = $numery_rekordow[array_rand($numery_rekordow)];
+$_SESSION['wylosowanyID']=$losowanie;
+
+echo $losowanie." ";
+    foreach ($pomocnicza as $id => $dane) {
+
+        if ($id == $losowanie) {
+            if ($dane['rodzajPytania'] == 'jednokrotnego') {
+                include "jednokrotnegoQuiz.php";
+                 unset($pomocnicza[$losowanie]);
+                echo "<input type='submit' name='dalej' value='dalej'>";
+            } else if ($dane['rodzajPytania'] == 'wielokrotnego') {
+                include "wielokrotnegoQuiz.php";
+                echo "<input type='submit' name='zakoncz' value='zakoncz'>";
+            }
+
+
+            }
+
+        }
+
+    unset($numery_rekordow[$losowanie]);
+}
+
+?>
+
+
+
+
+ChatGPT
+Aby wyświetlać kolejne pytanie po kliknięciu przycisku "dalej" w formularzu PHP, należy przechowywać informacje o stanie formularza w zmiennej sesji lub ciasteczku. Na przykład można tworzyć tablicę z pytaniami i aktualnym indeksem pytania, który zwiększa się po każdym kliknięciu przycisku "dalej".
+
+Następnie należy użyć instrukcji warunkowej, aby wyświetlić odpowiednie pytanie na podstawie aktualnego indeksu. Kod wyglądałby mniej więcej tak:
+
+// Inicjalizacja formularza (może być także pochodząca z wcześniejszego POST-a)
+if (!isset($_SESSION['form_data'])) {
+    $_SESSION['form_data'] = array(
+        'questions' => array('Pytanie 1', 'Pytanie 2', 'Pytanie 3'),
+        'current_question' => 0
+    );
+}
+
+// Obsługa przycisku "dalej"
+if (isset($_POST['next'])) {
+    $_SESSION['form_data']['current_question']++; // zwiększenie indeksu pytania
+
+    // Sprawdzenie czy wszystkie pytania zostały już zadane
+    if ($_SESSION['form_data']['current_question'] >= count($_SESSION['form_data']['questions'])) {
+        // Wyświetlenie podsumowania i resetowanie formularza
+        echo 'Dziękujemy za wypełnienie formularza!';
+        unset($_SESSION['form_data']);
+        exit;
+    }
+}
+
+// Wyświetlenie aktualnego pytania
+$current_question = $_SESSION['form_data']['current_question'];
+echo '<label>' . $_SESSION['form_data']['questions'][$current_question] . '</label>';
+echo '<input type="text" name="answer">';
+echo '<input type="submit" name="next" value="Dalej">';
+Oczywiście powyższy kod wymaga jeszcze dopasowania do konkretnych potrzeb, ale powinien dać ogólny pomysł na rozwiązanie problemu.
