@@ -13,84 +13,90 @@ session_start();
 
 <form method="post" action="edytujQuiz.php">
     <?php
-    if (isset($_SESSION['edytuj'])){
-        $mysqli = mysqli_connect("localhost", "root", "", "projekt");
-        $number = intval($_SESSION['edytuj']);
 
-        $s = $mysqli->query('SELECT nazwa_quizu,kategoria,poziom_trudnosci FROM Quizy where nazwa_uzytkownika='."'{$_COOKIE['email']} '");
-        while($row = mysqli_fetch_array($s))
-        {
-            $nazwy_quizow[]=$row['nazwa_quizu'];
-            $kategoria[]=$row['kategoria'];
-            $poziomTrudnosci[]=$row['poziom_trudnosci'];
-        }
-        $result=$mysqli->query('SELECT Id_quizu FROM Quizy WHERE nazwa_uzytkownika='."'{$_COOKIE['email']} '".'AND nazwa_quizu='."'{$nazwy_quizow[$number]} '");
-        while ($row = $result->fetch_assoc()) {
-            $id= $row['Id_quizu'];
-        }
-        setcookie('IDquizu',$id);
-       // $_SESSION['id']=$id;
-        $sql=$mysqli->query('SELECT COUNT(*) FROM Pytania WHERE Id_quizu='."'$id '");
+        $mysqli = mysqli_connect("localhost", "root", "", "projekt");
+
+
+        $quiz = $mysqli->query('SELECT nazwa_quizu,kategoria,poziom_trudnosci FROM Quizy where Id_quizu=' . "'{$_SESSION['id_quizu']} '");
+
+        $sql = $mysqli->query('SELECT COUNT(*) FROM Pytania WHERE Id_quizu=' . "'{$_SESSION['id_quizu']} '");
         while ($row = $sql->fetch_assoc()) {
 
-            $iloscPytan= $row['COUNT(*)'];
+            $iloscPytan = $row['COUNT(*)'];
         }
-        if($iloscPytan==0)
-        {
+        if ($iloscPytan == 0) {
             echo "Brak pytań w tym quizie";
-        }
-        else {
-            echo"Twoj quiz:";
-            echo "<table border='1px'>";
-            echo "<tr><th>Nazwa quizu</th><th>Kategoria</th><th>poziom trudnosci</th><th>edytuj</th></tr>";
-            echo "<tr>";
-                echo "<tr>";
-                echo "<th align='center'>{$nazwy_quizow[$number]}</th>";
-                 echo "<th align='center'>{$kategoria[$number]}</th>";
-                 echo "<th align='center'>{$poziomTrudnosci[$number]}</th>";
+              echo "Twoj quiz:";
+
+       echo "<table border='1px'>";
+       echo "<tr><th>Nazwa quizu</th><th>Kategoria</th><th>poziom trudnosci</th><th>edytuj</th></tr>";
+       if ($quiz->num_rows > 0) {
+           while ($row = $quiz->fetch_assoc()) {
+               echo "<tr>";
+               echo " <td>{$row['nazwa_quizu']}</td>";
+            echo "<th align='center'>{$row['kategoria']}</th>";
+            echo "<th align='center'>{$row['poziom_trudnosci']}</th>";
             echo "<th align='center'><input type='submit' name='EdytowanieQuizu' value='edytuj'></th>";
+               echo "</tr>";
 
-                echo "</tr>";
-
-
-
-            echo "</table><hr>";
-
-
-
-            $wynik = $mysqli->query('SELECT rodzaj_pytania, pytanie FROM Pytania WHERE Id_quizu=' . "'$id '");
-            while ($row = mysqli_fetch_array($wynik)) {
-                $rodzaj[] = $row['rodzaj_pytania'];
-                $pytanie[] = $row['pytanie'];
-            }
-
-
-            echo "Aby usunac pytanie zaznacz pytanie i kliknij odpowiedni przycisk";
-            echo "<table border='1px'>";
-            echo "<tr><th>Pytanie</th><th>Rodzaj pytania</th><th>usun</th></tr>";
-            echo "<tr>";
-            for ($i = 0; $i < $iloscPytan; $i++) {
-                echo "<tr>";
-
-                echo "<td align='center'>{$pytanie[$i]}<input type='radio' value={$i} name='pytania'></td>";
-                echo "<td align='center'>{$rodzaj[$i]}</td>";
-                echo "<td align='center'><input type='submit' name='usun'  value='usun'></td>";
-
-                echo "</tr>";
-            }
-            echo "<hr>";
+           }
+       }
+       echo "</table>";
 
 
 
-            echo "</table>";
-            echo "<hr>";
-            echo "Aby dodać kolejne pytanie do twojego quizu klikjnij poniżej: </br>";
+            echo "Aby dodać pytanie do twojego quizu klikjnij poniżej: </br>";
             echo "<input type='submit' name='dodajPytanie' value='Dodaj Pytanie'>";
-        }
+}
+        else{
+            echo "Twoj quiz:";
+       echo "<table border='1px'>";
+       echo "<tr><th>Nazwa quizu</th><th>Kategoria</th><th>poziom trudnosci</th><th>edytuj</th></tr>";
+       if ($quiz->num_rows > 0) {
+           while ($row = $quiz->fetch_assoc()) {
+               echo "<tr>";
+               echo " <td>{$row['nazwa_quizu']}</td>";
+            echo "<th align='center'>{$row['kategoria']}</th>";
+            echo "<th align='center'>{$row['poziom_trudnosci']}</th>";
+            echo "<th align='center'><input type='submit' name='edytuj' value='edytuj'></th>";
+               echo "</tr>";
 
-    }else{
-        echo "Błąd!<br>";
+           }
+       }
+       echo "</table>";
+       echo "<hr>";
+            echo "Aby dodać pytanie do twojego quizu klikjnij poniżej: </br>";
+            echo "<input type='submit' name='dodajPytanie' value='Dodaj Pytanie'>";
+    echo "<hr>";
+            ?>
+            </form>
+            <form action="usunPytanie.php" method="get">
+                <?php
+                $pytania= $mysqli->query('SELECT id_pytania,rodzaj_pytania, pytanie FROM Pytania WHERE Id_quizu=' . "'{$_SESSION['id_quizu']}'");
+
+                echo "</br>";
+
+                echo "Aby usunac pytanie kliknij w odpowiedni przycisk";
+                echo "<table border='1px'>";
+                    echo "<tr><th>Pytanie</th><th>Rodzaj pytania</th><th>usun</th></tr>";
+                    if ($pytania->num_rows > 0) {
+                    while ($row = $pytania->fetch_assoc()) {
+                    echo "<tr>";
+
+                        echo "<td align='center'>{$row['pytanie']}</td>";
+                        echo "<td align='center'>{$row['rodzaj_pytania']}</td>";
+                        echo "<td align='center'><input type='submit' name='{$row['id_pytania']}'  value='usun'></td>";
+
+                        echo "</tr>";
+                    }
+                    }
+
+                    echo "</table><hr>";
+
+            echo"</form>";
+
     }
+
     ?>
 
 </form>
@@ -99,19 +105,14 @@ session_start();
 </body>
 </html>
 <?php
-if (isset($_POST['usun'])) {
-    $_SESSION['usunPytanie'] = $_POST['pytania'];
-    $liczba=intval($_SESSION['usunPytanie']);
-    $mysqli->query('DELETE FROM Pytania WHERE pytanie='."'{$pytanie[$liczba]} '".'AND Id_quizu='."'$id '".'AND rodzaj_pytania='."'{$rodzaj[$liczba]}'");
-    $mysqli->close();
-}
-elseif (isset($_POST['EdytowanieQuizu']))
+
+if (isset($_POST['EdytowanieQuizu']))
 {
     header("Location: edytowanieWartosciWQuizie.php");
 
     $mysqli->close();
 }
-elseif (isset($_POST['dodajPytanie']))
+else if (isset($_POST['dodajPytanie']))
 {
     include("dodajPytania.php");
     $mysqli->close();

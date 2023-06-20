@@ -1,5 +1,4 @@
 <?php
-
 if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]))
 {
 
@@ -16,7 +15,7 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
 
 ?>
 
-    <form action="rozwiazywanieQuizow.php" method="post">
+    <form action="wielokrotnegoQuiz.php" method="post">
         <?php
         echo"<fieldset>";
         echo "Wybierz poprawne odpowiedzi";
@@ -47,8 +46,12 @@ if(isset($_POST['dalej']))
 {
     if($_POST['odpowiedz1']==$odpowiedz1 && $_POST['odpowiedz2']==$odpowiedz2 && $_POST['odpowiedz3']==$odpowiedz3  )
     {
-        $wynik= $_COOKIE['wynik'];
-        setcookie('wynik',$wynik++);
+        if(isset($_COOKIE['wynik']))
+        {
+            $wynik=$_COOKIE['wynik'];
+            $wynik++;
+            setcookie('wynik',$wynik,time()+3600);
+        }
     }
     $ile=count($_SESSION['numeryRekordow'])-2;
     if ($_SESSION['aktualnePytanie']== $ile)

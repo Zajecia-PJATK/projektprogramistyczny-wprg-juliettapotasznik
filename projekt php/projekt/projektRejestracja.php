@@ -24,7 +24,7 @@ $mysqli = mysqli_connect("localhost", "root", "", "projekt");
 if (isset($_POST['rejestracja']))
 {
     $email=$_POST['email'];
-    $haslo=$_POST['password'];
+    $haslo=password_hash($_POST['password'],PASSWORD_DEFAULT);
 
 $semail='SELECT email FROM uzytkownicy WHERE email='."'$email'";
     $result=$mysqli->query($semail);
@@ -32,8 +32,8 @@ $semail='SELECT email FROM uzytkownicy WHERE email='."'$email'";
     if ($result->num_rows == 0)
     {
 
-        $mysqli->query("INSERT INTO uzytkownicy (`email`, `haslo`)
-                    VALUES ('".$email."', '".$haslo."');");
+        $mysqli->query("INSERT INTO uzytkownicy (`email`, `haslo`,`liczba_punktow`,`rozegrane_quizy`)
+                    VALUES ('".$email."', '".$haslo."',0,0);");
 
             echo "Konto zostało utworzone!";
         header("Location: projektLogowanie.php");

@@ -112,10 +112,11 @@ $tabPytania['aktualnePytanie']=0;
 
 if (!isset($_SESSION['pom'])) {
     $_SESSION['pom']=$tabPytania;
-
+    setcookie('wynik', 0);
 
 }
-print_r($_SESSION['pom']);
+
+
 
 ?>
 <!DOCTYPE html>
@@ -131,21 +132,25 @@ $numery_rekordow = array_keys($_SESSION['pom']);
 $_SESSION['numeryRekordow'] = $numery_rekordow;
 $_SESSION['aktualnePytanie'] = $aktualnePytanie;
 
+
     echo '<form action="rozwiazywanieQuizow.php" method="post">';
-    echo $_SESSION['aktualnePytanie'];
-    echo count($_SESSION['numeryRekordow'])-2;
+
 
     if ($_SESSION['pom'][$numery_rekordow[$aktualnePytanie]]['rodzajPytania'] == 'jednokrotnego') {
+
         include "jednokrotnegoQuiz.php";
     } else if ($_SESSION['pom'][$numery_rekordow[$aktualnePytanie]]['rodzajPytania'] == 'wielokrotnego') {
+
         include "wielokrotnegoQuiz.php";
     } else if ($_SESSION['pom'][$numery_rekordow[$aktualnePytanie]]['rodzajPytania'] == 'luki') {
+
         include "lukiQuiz.php";
     } else if ($_SESSION['pom'][$numery_rekordow[$aktualnePytanie]]['rodzajPytania'] == 'otwarte') {
+
         include "lukiQuiz.php";
     }
     echo "</br>";
-    echo "<input type='submit' value='zakoncz' name='zakoncz'>";
+
 
 
     echo '</form>';
@@ -155,10 +160,3 @@ $_SESSION['aktualnePytanie'] = $aktualnePytanie;
 
 </body>
 </html>
-<?php
-if(isset($_POST['zakoncz']))
-{
-    header("Location: koniecQuizu.php");
-    unset($_SESSION['pom']);
-
-}

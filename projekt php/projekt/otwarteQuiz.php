@@ -11,7 +11,7 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
 
 ?>
 
-<form action="rozwiazywanieQuizow.php" method="post">
+<form action="otwarteQuiz.php" method="post">
     <?php
     echo"<fieldset>";
     echo "Odpowiedz na pytanie ";
@@ -32,9 +32,12 @@ if(isset($_POST['dalej']))
 {
     $odp='/'.$odpowiedz.'/i';
 if(preg_match($odp,$_POST['odpowiedz'])==1)
+{if(isset($_COOKIE['wynik']))
 {
-    $wynik= $_COOKIE['wynik'];
-    setcookie('wynik',$wynik++);
+    $wynik=$_COOKIE['wynik'];
+    $wynik++;
+    setcookie('wynik',$wynik,time()+3600);
+}
 }
     $ile=count($_SESSION['numeryRekordow'])-2;
     if ($_SESSION['aktualnePytanie']== $ile)

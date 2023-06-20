@@ -10,39 +10,34 @@ session_start();
 <body>
 <form method="post" action="usunQuiz.php">
     <?php
-    if (isset($_SESSION['usun'])){
+
         $mysqli = mysqli_connect("localhost", "root", "", "projekt");
-        $number = intval($_SESSION['usun']);
-        $pytanie = $mysqli->query('SELECT nazwa_quizu FROM Quizy where nazwa_uzytkownika='."'{$_COOKIE['email']} '");
-        while($row = mysqli_fetch_array($pytanie))
-        {
-            $nazwy_quizow[]=$row['nazwa_quizu'];
+          $quiz = $mysqli->query('SELECT nazwa_quizu,kategoria,poziom_trudnosci FROM Quizy where Id_quizu=' . "'{$_SESSION['id_quizu']} '");
+   echo "Dane twojego quizu:";
+    echo "<table border='1px'>";
+    echo "<tr><th>Nazwa quizu</th><th>Kategoria</th><th>poziom trudnosci</th></tr>";
+    if ($quiz->num_rows > 0) {
+        while ($row = $quiz->fetch_assoc()) {
+            echo "<tr>";
+            echo " <td>{$row['nazwa_quizu']}</td>";
+            echo "<th align='center'>{$row['kategoria']}</th>";
+            echo "<th align='center'>{$row['poziom_trudnosci']}</th>";
+
+            echo "</tr>";
         }
-
-
-
-        echo "<h4>Dane usuwanego quizu:</h4><br>";
-        echo "<table border='1px'>";
-        echo "<tr><th>Nazwa</th></tr>";
-        echo "<tr>";
-
-        echo "<td>{$nazwy_quizow[$number]}</td>";
-        echo "</tr>";
-        echo "</table>";
-    }else{
-        echo "Błąd!<br>";
     }
+    echo "</table>";
     ?>
 
     <br>
-    <input type="submit" name="delete" value="Potwierdź usnięcie quizu"><br>
+    <input type="submit" name="usun" value="Potwierdź usnięcie quizu"><br>
     <a href="projekt.php">Powrót do menu glownego</a>
 </form>
 <?php
-if (isset($_POST['delete'])){
-    $_SESSION['usunPytanie'] = $_POST['pytania'];
-    $liczba=intval($_SESSION['usunPytanie']);
-    $mysqli->query('DELETE FROM Pytania WHERE pytanie='."'{$pytanie[$liczba]} '".'AND Id_quizu='."'$id '".'AND rodzaj_pytania='."'{$rodzaj[$liczba]}'");
+if (isset($_POST['usun'])){
+
+    $mysqli->query('DELETE FROM pytania WHERE id_quizu='."'{$_SESSION['id_quizu']}'");
+    $mysqli->query('DELETE FROM quizy WHERE id_quizu='."'{$_SESSION['id_quizu']}'");
     echo "Quiz został usunięty.<br>";
 }
 $mysqli->close();

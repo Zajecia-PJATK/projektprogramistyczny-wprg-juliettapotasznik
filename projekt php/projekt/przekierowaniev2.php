@@ -10,6 +10,7 @@ $_SESSION['ID_QUIZU']=$match[1];
 <head>
     <meta charset="UTF-8">
     <title>QUIZ</title>
+
 </head>
 <h2 text align="center">ZACZNIJ ROZWIĄZYWAĆ QUIZ</h2>
 <body>
