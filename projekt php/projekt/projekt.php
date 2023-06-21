@@ -7,7 +7,13 @@ $pyt= $mysqli->query('SELECT isAdmin FROM uzytkownicy WHERE email=' . "'{$_COOKI
                 {
                     $isAdmin=$row['isAdmin'];
                 }
-                if($isAdmin==0) {
+
+$pyt= $mysqli->query('SELECT logowanie FROM uzytkownicy WHERE email=' . "'{$_COOKIE['email']} '");
+while($row=$pyt->fetch_assoc())
+{
+    $data=$row['logowanie'];
+}
+    if($isAdmin==0) {
 
 
 
@@ -24,10 +30,14 @@ $pyt= $mysqli->query('SELECT isAdmin FROM uzytkownicy WHERE email=' . "'{$_COOKI
 <?php
 echo "<h4>Witaj {$_COOKIE['email']}</h4> ";
 
+echo "<h5> Twoje ostatnie logowanie: {$data}</h5>";
+
 ?>
+
 <h3 text align="right">Ranking wszystkich uzytkownikow:</h3>
 <?php
 $ranking= $mysqli->query('SELECT email,liczba_punktow,rozegrane_quizy FROM uzytkownicy order by liczba_punktow DESC ');
+
 
 echo "<table text align='right' border='1px'>";
 echo "<tr><th>Nazwa uzytkownika</th><th>liczba punktow</th><th>Rozegrane quizy</th></tr>";
@@ -44,10 +54,13 @@ if ($ranking->num_rows > 0) {
     }
 }
 echo "</table>";
+echo "</br>";
 
 ?>
+
 <form method="get" action="przekierowanie.php">
     <?php
+
 
     $sql=$mysqli->query('SELECT COUNT(*) FROM Quizy WHERE nazwa_uzytkownika='."'{$_COOKIE['email']} '");
     while ($row = $sql->fetch_assoc()) {
@@ -57,7 +70,7 @@ echo "</table>";
         echo "<p>Brak quizów</p>";
     }else {
         echo "<h4>Twoje quizy:</h4>";
-        echo "Aby usunac lub edytowac quiz zaznacz nazwę i kliknij odpowiedni przycisk";
+        echo "Aby usunac lub edytowac quiz  kliknij odpowiedni przycisk";
 
        $pytanie = $mysqli->query('SELECT nazwa_quizu , Id_quizu FROM Quizy where nazwa_uzytkownika=' . "'{$_COOKIE['email']} '");
 
@@ -78,6 +91,7 @@ echo "</table>";
 
 
    }
+
     $mysqli->close();
     ?>
 </form>
@@ -86,6 +100,8 @@ echo "</table>";
             <li><a href="dodajQuiz.php">Dodaj quiz</a></li>
         <li><a href="przegladajQuizy.php">Przeglądaj lub wyszukaj quizów</a></li>
         <li><a href="edytujProfil.php">Edytuj swoj profil</a></li>
+    <li><a href="eksportujWyniki.php">Eksportuj wyniki do pliku</a></li>
+
         </ul>
 <hr>
 <form action="projekt.php" method="post">
@@ -128,7 +144,13 @@ Opcje Admina:<ul>
 </html>
 <?php
 }
+$mysqli = mysqli_connect("localhost", "root", "", "projekt");
 if(isset($_POST['wyloguj']))
 {
+    setcookie("email", "", time() - 3600);
+    $_SESSION['zalogowany']=false;
+    $data=date("Y-m-d G:i:s");
+    $mysqli->query("UPDATE uzytkownicy SET logowanie= "."'{$data}'"."WHERE email="."'{$_COOKIE['email']}'");
+    $mysqli->close();
     header("Location: projektLogowanieRejestracja.html");
 }

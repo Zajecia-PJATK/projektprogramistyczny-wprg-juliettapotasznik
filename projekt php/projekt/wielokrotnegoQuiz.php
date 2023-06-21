@@ -22,11 +22,11 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
         echo "<br>";
         echo $pytanie;
         echo "<br>";
-        echo $odpowiedz1."<input type='radio' value=$odpowiedz1 name='odpowiedz1'>";
+        echo $odpowiedz1."<input type='radio' value='{$odpowiedz1}' name='odpowiedz1'>";
         echo "<br>";
-        echo $odpowiedz2."<input type='radio' value=$odpowiedz2 name='odpowiedz2'>";
+        echo $odpowiedz2."<input type='radio' value='{$odpowiedz2}' name='odpowiedz2'>";
         echo "<br>";
-        echo $odpowiedz3."<input type='radio' value=$odpowiedz3 name='odpowiedz3'>";
+        echo $odpowiedz3."<input type='radio' value='{$odpowiedz3}' name='odpowiedz3'>";
         echo "<br>";
         echo $niep1."<input type='radio' value='{$niep1}' name='nieprawidlowa1'>";
         echo "<br>";
@@ -44,14 +44,13 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
 
 if(isset($_POST['dalej']))
 {
-    if($_POST['odpowiedz1']==$odpowiedz1 && $_POST['odpowiedz2']==$odpowiedz2 && $_POST['odpowiedz3']==$odpowiedz3  )
+    if(strcmp("{$_POST['odpowiedz1']}","{$odpowiedz1}")==0 && strcmp("{$_POST['odpowiedz2']}","{$odpowiedz2}")==0 && strcmp("{$_POST['odpowiedz3']}","{$odpowiedz3}")==0 )
     {
-        if(isset($_COOKIE['wynik']))
-        {
+
             $wynik=$_COOKIE['wynik'];
             $wynik++;
             setcookie('wynik',$wynik,time()+3600);
-        }
+
     }
     $ile=count($_SESSION['numeryRekordow'])-2;
     if ($_SESSION['aktualnePytanie']== $ile)

@@ -5,7 +5,7 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
         {
 
         $pytanie=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['pytanie'];
-        $odpowiedz1=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['odpowiedz1'];
+            $odpowiedz1=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['odpowiedz1'];
         $podpowiedz=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['podpowiedz'];
         $niep1=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['nieprawidlowa_odp1'];
         $niep2=$_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie']]]['nieprawidlowa_odp2'];
@@ -19,7 +19,7 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
        echo "<br>";
        echo $pytanie;
        echo "<br>";
-       echo $odpowiedz1 . "<input type='radio' value={$odpowiedz1} name='odpowiedzi'>";
+       echo $odpowiedz1 . "<input type='radio' value='{$odpowiedz1}' name='odpowiedzi'>";
        echo "<br>";
        echo $niep1 . "<input type='radio' value='{$niep1}' name='odpowiedzi'>";
        echo "<br>";
@@ -33,28 +33,23 @@ if(isset($_SESSION['pom'][$_SESSION['numeryRekordow'][$_SESSION['aktualnePytanie
        echo " </form>";
 
        if (isset($_POST['dalej'])) {
+           if (strcmp("{$_POST['odpowiedzi']}","{$odpowiedz1}")==0)
+           {
+               $wynik = $_COOKIE['wynik'];
+               $wynik++;
+               setcookie('wynik', $wynik);
+
+           }
 
 
            $ile = count($_SESSION['numeryRekordow']) - 2;
            if ($_SESSION['aktualnePytanie'] == $ile) {
-               if ($_POST['odpowiedzi'] == $odpowiedz1) {
 
-                   $wynik = $_COOKIE['wynik'];
-                   $wynik++;
-                   setcookie('wynik', $wynik);
-
-               }
                header("Location: koniecQuizu.php");
                unset($_SESSION['pom']);
                exit;
            } else {
-               if ($_POST['odpowiedzi'] ==$odpowiedz1) {
 
-                   $wynik = $_COOKIE['wynik'];
-                   $wynik++;
-                   setcookie('wynik', $wynik);
-
-               }
                $_SESSION['pom']['aktualnePytanie']++; // zwiększenie indeksu pytania
                header("Location: rozwiazywanieQuizow.php");
            }

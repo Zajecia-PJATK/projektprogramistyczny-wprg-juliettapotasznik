@@ -33,11 +33,10 @@ if(isset($_POST['zaloguj'])) {
         while ($row = $pom->fetch_assoc()) {
             $hash = $row['haslo'];
         }
-        if (password_verify($haslo, $hash) == true) {
+        if ((password_verify($hash, $haslo))==TRUE) {
 
             $spr = 'SELECT email FROM uzytkownicy WHERE email=' . "'$email'";
             $result = $mysqli->query($spr);
-
             if ($result->num_rows > 0) {
 
                 $pyt= $mysqli->query('SELECT isAdmin FROM uzytkownicy WHERE email=' . "'$email'");
@@ -48,6 +47,9 @@ if(isset($_POST['zaloguj'])) {
                 if($isAdmin==1) {
                     setcookie('email', $email);
                     $_SESSION['admin']=TRUE;
+                    $_SESSION['zalogowany']=true;
+
+
                     header("Location: projekt.php");
                     exit();
                 }
@@ -66,11 +68,11 @@ if(isset($_POST['zaloguj'])) {
     else{
         $email = $_POST['email'];
         $haslo = $_POST['password'];
-        $pom = $mysqli->query('SELECT haslo FROM uzytkownicy ');
+        $pom = $mysqli->query('SELECT haslo FROM uzytkownicy where email='."'$email'");
         while ($row = $pom->fetch_assoc()) {
             $hash = $row['haslo'];
         }
-        if (password_verify($haslo, $hash) == true) {
+        if (password_verify($haslo, $hash)==true) {
 
             $spr = 'SELECT email FROM uzytkownicy WHERE email=' . "'$email'";
             $result = $mysqli->query($spr);
@@ -79,6 +81,7 @@ if(isset($_POST['zaloguj'])) {
 
                     setcookie('email', $email);
                 $_SESSION['admin']=FALSE;
+                $_SESSION['zalogowany']=true;
 
                     header("Location: projekt.php");
                     exit();
