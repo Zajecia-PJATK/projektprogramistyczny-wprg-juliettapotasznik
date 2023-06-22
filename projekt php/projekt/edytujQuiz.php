@@ -106,7 +106,7 @@ session_start();
 </html>
 <?php
 
-if (isset($_POST['EdytowanieQuizu']))
+if (isset($_POST['edytuj']))
 {
     header("Location: edytowanieWartosciWQuizie.php");
 

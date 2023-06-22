@@ -9,7 +9,7 @@
 
 <form action="luki.php" method="post">
     <fieldset>
-        <label>Podaj zdanie w ktorym znajduje sie odpowiedz:</label>
+        <label>Podaj zdanie z luka:</label>
         <input type="text" name="pytanie" maxlength="100" required></br>
         <label>Podaj podpowiedz:</label>
         <input type="text" name="podpowiedz" maxlength="100" required></br>
